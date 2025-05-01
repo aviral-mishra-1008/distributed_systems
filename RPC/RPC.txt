@@ -1,0 +1,18 @@
+RPC
+
+
+1) make the RPCgen transfer.x file and include:
+	. CONSTANTS YOU NEED AS CONST var = val
+	. DEFINE STRUCTS for any structure used in transit
+	. Then program version and inside that the functions and give the id as 1,2,3 to each function
+	. RPCGEN RUN
+	. For transfer.h file generated you will find the extern functions, funcname_ver_svc() implement them as in 
+	. for say a function send_data(file_data)=1; in transfer.x you will have to implement send_data_1_svc(file_data *data, struct svc_req *req) where this svc_req is always needed
+	. No main function in server
+	. define client.c and here we follow a certain convention
+	. see anything you need that can be done in client itself do it in client itself
+	. in main function take a CLIENT *client and then you follow this order:
+	. take server ip i.e localhost in cmd prompt argv, server filename
+	. client = clnt_create(argv[1], PROGRAM_NAME, VERSION_NAME, "tcp")  i.e FILE_TRANSFER_PROG, FILE_TRANSFER_VERS
+	. then when you need to call a function you defined like send_data you call it as send_data_version i.e send_data_1(args..., client), this client goes as svc_request
+	. then do what ever the hell you want, and at last clnt_destroy(client);
